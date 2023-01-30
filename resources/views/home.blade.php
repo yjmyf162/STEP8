@@ -24,7 +24,7 @@
             <select data-toggle="select" class="form-control" name="choice" >
                <option value="" disabled style='display:none;' @if (empty($Companies->company_name)) selected @endif>メーカーを選択してください</option>
                @foreach($Companies as $Company)
-                 <option value="{{ $Company->id }}">{{ $Company->company_name }}</option>
+                <option value="{{ $Company->id }}">{{ $Company->company_name }}</option>
                @endforeach
             </select>
           </div>

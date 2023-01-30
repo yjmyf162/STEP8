@@ -33,24 +33,16 @@ class HomeController extends Controller
 
         $Products = Product::all();
         $Companies = Company::all();
-
         $keyword = $request->input('keyword');
         $choice = $request->input('choice');
- 
-        $query = Product::query();
 
-        if(!empty($keyword)) {
-            $query->where('product_name', 'LIKE', "%{$keyword}%");        
-        }
         
-        if(!empty($choice)) {
-            $query->where('company_id', 'LIKE', $choice);        
-        }
+        //商品検索
+        $product = new Product;
+        $productSearch = $product->productSearch($request);
+        
 
-
-        $Products = $query->get();     
-
-        return view('home',['Products' => $Products, 'Companies' => $Companies, 'keyword' => $keyword, 'choice' => $choice ]);
+        return view('home',['Products' => $Products, 'Companies' => $Companies, 'keyword' => $keyword, 'choice' => $choice,]);
     }       
 
         
@@ -86,39 +78,19 @@ class HomeController extends Controller
      * @return view
      */
     public function exeRegist(ProductRequest $request)
-    {
-        //商品のデータを受け取る
-        $inputs = $request->all();
-        $img = $request->file('img_path');
-        if(!empty($img)){
-        $img_name = $request->file('img_path')->getClientOriginalName();
-
-        // storage > public > img配下に画像が保存される
-        $path = $request->file('img_path')->storeAs('public',$img_name); 
-        }else{
-        $img_name = null;
-        }
-
-        \DB::beginTransaction();
-        
+    {       
         //商品登録
-        
-        $Product = Product::create($inputs);
-        $Company = Company::all();
-        $Product->fill([
-            'product_name' => $inputs['product_name'],
-            'company_id' => $inputs['company_name'],            
-            'price' => $inputs['price'],
-            'stock' => $inputs['stock'],
-            'comment' => $inputs['comment'],
-            'img_path' => 'storage/' . 'img' . '/' . $img_name,
-                        
-        ]);
-        
-        $Product->save();
-        
+        \DB::beginTransaction();
+        try { 
+        $product = new Product;
+        $productRegist = $product->productRegist($request);
+                
         \DB::commit();
-            
+        } catch(\Throwable $e) {
+        \DB::rollback();    
+        abort(500);
+        }   
+
         return redirect(route('create'));
     }
 
@@ -149,42 +121,18 @@ class HomeController extends Controller
      */
     public function exeUpdate(ProductRequest $request)
     {
-        //商品のデータを受け取る
         $inputs = $request->all();
-        $img = $request->file('img_path');
-        if(!empty($img)){
-        $img_name = $request->file('img_path')->getClientOriginalName();
-        
-       
-        // storage > public > img配下に画像が保存される
-        $path = $request->file('img_path')->storeAs('public/'.'img', $img_name);
-        }else{
-            $img_name = NULL;
-        }
-       
-
-        \DB::beginTransaction();
-        
-        //商品更新
         $Product = Product::with('company')->find($inputs['id'],);
-        $Company = Company::find($inputs['id'],);
-
-        $Product->fill([
-            'product_name' => $inputs['product_name'],
-            'company_id' => $inputs['company_name'],
-            'price' => $inputs['price'],
-            'stock' => $inputs['stock'],
-            'comment' => $inputs['comment'],
-            'img_path' => 'storage/' . 'img' . '/' . $img_name,
-                        
-        ]);
-        
-
-        $Product->save();
-
-        \DB::commit();
+        \DB::beginTransaction();
+        try {
+        $products = new Product;
+        $productEdit = $products->productEdit($request);
     
-
+        \DB::commit();
+        } catch(\Throwable $e) {
+        \DB::rollback();    
+        abort(500);
+        }   
          
         return redirect(route('edit', $Product->id ));
     }
