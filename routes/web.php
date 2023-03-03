@@ -20,8 +20,26 @@ Auth::routes();
 // ホーム画面
 Route::get('/home', 'HomeController@index')->name('home');
 
+// 商品一覧表示
+Route::get('/home/table', 'HomeController@showTable')->name('table');
+
 // 商品情報の検索
-Route::get('/home/search', 'HomeController@index')->name('search');
+Route::get('/home/search', 'HomeController@search')->name('search');
+
+// 商品情報のソート
+Route::get('/home/sort/id', 'HomeController@sortId')->name('sort-id');
+
+// 商品情報のソート
+Route::get('/home/sort/product_name', 'HomeController@sortProduct_name')->name('sort-product_name');
+
+// 商品情報のソート
+Route::get('/home/sort/price', 'HomeController@sortPrice')->name('sort-price');
+
+// 商品情報のソート
+Route::get('/home/sort/stock', 'HomeController@sortStock')->name('sort-stock');
+
+// 商品情報のソート
+Route::get('/home/sort/company_name', 'HomeController@sortCompany_name')->name('sort-company_name');
 
 // 商品情報の削除
 Route::post('/home/delete/{id}', 'HomeController@exeDelete')->name('delete');

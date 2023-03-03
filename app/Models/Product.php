@@ -23,24 +23,148 @@ class Product extends Model
 
     public function productSearch(Request $request){
         
+        //データ取得
+        $inputs = $request->all();
+        $keyword = $inputs['keyword'];
+        $choice = $inputs['choice'];
+        $price_upper = $inputs['price_upper'];
+        $price_lower = $inputs['price_lower'];
+        $stock_upper = $inputs['stock_upper'];
+        $stock_lower = $inputs['stock_lower'];
 
+        //商品検索
+        
+        
+        if(!empty($keyword || $choice)){
+            $products = Product::with('Company')->where('product_name', 'LIKE', "%{$keyword}%")
+                    ->where('company_id', 'LIKE', $choice)->get();}
+
+                    if((!empty($stock_upper && $stock_lower))&&(!empty($price_upper && $price_lower))){
+                        $products = Product::with('Company')->where('product_name', 'LIKE', "%{$keyword}%")
+                        ->where('company_id', 'LIKE', $choice)->where('price', '<=', $price_upper)
+                        ->where('price', '>=', $price_lower)->where('stock', '<=', $stock_upper)
+                        ->where('stock', '>=', $stock_lower)->get();}
+                    
+                    
+                        elseif(!empty($stock_upper && $stock_lower)){
+                            $products = Product::with('Company')->where('product_name', 'LIKE', "%{$keyword}%")
+                            ->where('company_id', 'LIKE', $choice)->where('stock', '<=', $stock_upper)
+                            ->where('stock', '>=', $stock_lower)->get();}
+
+                            elseif(!empty($price_upper && $price_lower)){
+                                $products = Product::with('Company')->where('product_name', 'LIKE', "%{$keyword}%")
+                                        ->where('company_id', 'LIKE', $choice)->where('price', '<=', $price_upper)
+                                        ->where('price', '>=', $price_lower)->get();}
+                        
+                            return ($products);    
+    }       
         
  
-        $query = Product::query();
-
-        if(!empty($keyword)) {
-            $query->where('product_name', 'LIKE', "%{$keyword}%");        
-        }
+    public function productSortId(Request $request)
+    {        
+        $sort = $request->all();
         
-        if(!empty($choice)) {
-            $query->where('company_id', 'LIKE', $choice);        
+        $id = $sort['id'];
+        
+
+        if(!empty($id)){
+        if ($id){
+            if($id == '1'){
+                $products = Product::with('Company')->orderBy('id')->get();
+            }elseif($sort['id'] == '2'){
+                $products = Product::with('Company')->orderBy('id','DESC')->get();
+            }
         }
-
-
-        $Products = $query->get();
+    }
+    
+    return ($products);
+    }
              
 
+    public function productSortProduct_name(Request $request)
+    {        
+        $sort = $request->all();
+        
+        $product_name = $sort['product_name'];
+        
+        if(!empty($product_name)){
+        if ($product_name){
+            if($product_name == '5'){
+                $products = Product::with('Company')->orderBy('product_name')->get();
+            }elseif($sort['product_name'] == '6'){
+                $products = Product::with('Company')->orderBy('product_name','DESC')->get();
+            }
+        }
     }
+
+    return ($products);
+    }
+
+    public function productSortPrice(Request $request)
+    {        
+        $sort = $request->all();
+           
+        $price = $sort['price'];
+
+
+    if(!empty($price)){
+        if ($price){
+            if($price == '7'){
+                $products = Product::with('Company')->orderBy('price')->get();
+            }elseif($sort['price'] == '8'){
+                $products = Product::with('Company')->orderBy('price','DESC')->get();
+            }
+        }
+    }
+
+    return ($products);
+    }
+
+
+    public function productSortStock(Request $request)
+    {        
+        $sort = $request->all();
+    
+        $stock = $sort['stock'];
+        
+
+    if(!empty($stock)){
+        if ($stock){
+            if($stock == '9'){
+                $products = Product::with('Company')->orderBy('stock')->get();
+            }elseif($sort['stock'] == '10'){
+                $products = Product::with('Company')->orderBy('stock','DESC')->get();
+            }
+        }
+    }
+
+    return ($products);
+    }
+
+
+    public function productSortCompany_name(Request $request)
+    {        
+        $sort = $request->all();
+        
+        $company_name = $sort['company_name'];
+
+    if(!empty($company_name)){
+        if ($company_name){
+            if($company_name == '11'){
+                $products = Product::select('products.id','companies.id as company_id','products.product_name','products.price','products.stock','products.img_path','companies.company_name')
+        ->join('companies','products.company_id','=','companies.id')->orderBy('company_name')
+        ->get();
+            }elseif($company_name == '12'){
+                $products = Product::select('products.id','companies.id as company_id','products.product_name','products.price','products.stock','products.img_path','companies.company_name')
+        ->join('companies','products.company_id','=','companies.id')->orderBy('company_name','DESC')
+        ->get();
+            }
+        }
+    }
+
+        return ($products);
+    }
+
 
     public function productRegist(ProductRequest $request){
 

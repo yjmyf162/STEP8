@@ -11,25 +11,26 @@
     <div class="navbar-nav">
       <a class="nav-item nav-link active" href="http://localhost:8888/step7/public/home/create">新規登録 <span class="sr-only"></span></a>
     <div class="search">    
-      <form method="GET" action="{{ route('search') }}">
+      <form>
       @foreach($Companies as $Company)
       <input type="hidden" name="id" value="{{ $Company->id }}">
       @endforeach
-      @csrf 
       <div class="form-group">
         <div>
-          <input type="search" placeholder="商品名のキーワードを入力" class="form-control" name="keyword" value="{{ $keyword }}">
-        </div>
-          <div>
-            <select data-toggle="select" class="form-control" name="choice" >
+          <input type="text" id="keyword" placeholder="商品名のキーワードを入力" class="form-control" name="keyword">
+            <select id="choice" data-toggle="select" class="form-control" name="choice" >
                <option value="" disabled style='display:none;' @if (empty($Companies->company_name)) selected @endif>メーカーを選択してください</option>
                @foreach($Companies as $Company)
                 <option value="{{ $Company->id }}">{{ $Company->company_name }}</option>
                @endforeach
             </select>
+            <input type="text" id="price_upper" placeholder="価格の上限値を入力" class="form-control" name="price_upper">
+            <input type="text" id="price_lower" placeholder="価格の下限値を入力" class="form-control" name="price_lower">
+            <input type="text" id="stock_upper" placeholder="在庫数の上限値を入力" class="form-control" name="stock_upper">
+            <input type="text" id="stock_lower" placeholder="在庫数の下限値を入力" class="form-control" name="stock_lower">
           </div>
         <div>
-          <input type="submit" value="検索" class="btn btn-info"> 
+          <input type="button" value="検索" class="btn btn-info"> 
         </div>
       </div>      
       </form>
@@ -44,44 +45,22 @@
   <div class="col-md-10 col-md-offset-2">
       <h2>商品一覧</h2>
       <table class="table table-striped">
+        <form>
           <tr>
-              <th>id</th>
+              <th><a id="id"  class="sort-id">id</a></th>
               <th>商品画像</th>
-              <th>商品名</th>
-              <th>価格</th>
-              <th>在庫数</th>
-              <th>メーカー名</th>  
+              <th><a id="product_name"  class="sort-product_name">商品名</a></th>
+              <th><a id="price"  class="sort-price">価格</a></th>
+              <th><a id="stock"  class="sort-stock">在庫数</a></th>
+              <th><a id="company_name"  class="sort-company_name">メーカー名</a></th>  
               <th>詳細</th>
               <th>削除</th>            
           </tr>
-          @foreach($Products as $Product)
-          <tr>
-              <td>{{ $Product->id }}</td>
-              <td><img src="{{ asset($Product->img_path) }}" width="10%"></td>
-              <td>{{ $Product->product_name }}</td>
-              <td>{{ $Product->price }}</td>
-              <td>{{ $Product->stock }}</td>
-              <td>{{ $Product->company->company_name }}</td>
-              <td><button type="button" class = "btn-detail" onclick = "location.href = '/step7/public/home/{{ $Product->id }}'">詳細</button></td>
-              <td><form method="POST" enctype="multipart/form-data" action="{{ route('delete', $Product->id) }}" onSubmit="return checkDelete()">
-              @csrf                      
-              <button type="submit" class = "btn-delete" >削除</button>
-              </form>
-              </td>
-          </tr>
-          @endforeach
-          
+        </form>
+         <tbody class="product-table">
+         </tbody>
       </table>
     </div>
     </div>
   </div>
-<script>
-function checkDelete(){
-if(window.confirm('削除してよろしいですか？')){
-return true;
-} else {
-return false;
-}
-}
-</script>
 @endsection

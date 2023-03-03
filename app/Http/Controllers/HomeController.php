@@ -24,29 +24,94 @@ class HomeController extends Controller
 
     /**
      * Show the application dashboard.
-     * 商品一覧を表示
-     * 商品検索
+     * ホームを表示
+     * 
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index(Request $request)
     {
-
-        $Products = Product::all();
         $Companies = Company::all();
-        $keyword = $request->input('keyword');
-        $choice = $request->input('choice');
-
+        return view('home',['Companies' => $Companies]);
         
-        //商品検索
+    }
+    
+    /**
+     * Show the application dashboard.
+     * 商品一覧を表示
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function showTable(Request $request)
+    {        
+        $Products = Product::with('Company')->get();
+
+        return $Products;
+
+    }
+
+
+/**
+     * Show the application dashboard.
+     * 商品検索
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function search(Request $request)
+    {
         $product = new Product;
         $productSearch = $product->productSearch($request);
-        
 
-        return view('home',['Products' => $Products, 'Companies' => $Companies, 'keyword' => $keyword, 'choice' => $choice,]);
+        return ($productSearch);    
     }       
-
-        
     
+    /**
+     * Show the application dashboard.
+     * 商品一覧をソート
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+    public function sortId(Request $request)
+    {        
+        $product = new Product;
+        $productSortId = $product->productSortId($request);
+    
+    return ($productSortId);
+    }
+
+    public function sortProduct_name(Request $request)
+    {        
+        $product = new Product;
+        $productSortProduct_name = $product->productSortProduct_name($request);
+
+    return ($productSortProduct_name);
+    }
+
+
+    public function sortPrice(Request $request)
+    {        
+        $product = new Product;
+        $productSortPrice = $product->productSortPrice($request);
+
+    return ($productSortPrice);
+    }
+
+
+    public function sortStock(Request $request)
+    {        
+        $product = new Product;
+        $productSortStock = $product->productSortStock($request);
+
+    return ($productSortStock);
+    }
+
+
+    public function sortCompany_name(Request $request)
+    {       
+        $product = new Product;
+        $productSortCompany_name = $product->productSortCompany_name($request);
+ 
+        return ($productSortCompany_name);
+    }
+
+
+   
 
      /**
      * 商品詳細を表示
@@ -140,22 +205,16 @@ class HomeController extends Controller
     
     /**
      * 商品情報の削除
-     * @param int $id
+     * 
      * @return view
      */
-    public function exeDelete($id)
+    public function exeDelete(Request $request)
     {
-              
-        try {
             //商品削除
-            Product::destroy($id);
-        } catch(\Throwable $e) {
-            abort(500);
-        }
+            $product = Product::findOrFail($request->id);
+            $product->delete();
 
-        return redirect(route('home'));
+            return $product;
     }
-
-   
         
 }
