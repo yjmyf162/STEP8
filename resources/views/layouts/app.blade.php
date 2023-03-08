@@ -76,6 +76,6 @@
             @yield('content')
         </main>
     </div>
-    <script src="{{ asset('js/home.js?202203031544') }}" defer></script>            
+    <script src="{{ asset('js/home.js?202203071635') }}" defer></script>            
 </body>
 </html>

@@ -19,25 +19,30 @@ class Sale extends Model
 //商品登録(販売時)
 public function saleExeSale(Request $request)
     {        
-    $inputs = $request->all();
+            $inputs = $request->all();
             $Sale = Sale::create($inputs);
-            
+            $product_id = $inputs['product_id'];
+            $quantity = $inputs['quantity'];
+            $Product = Product::find($product_id);
+            $productStock = Product::where('id','=',$product_id)->value('stock');
+
             $Sale->fill([
-                'product_id' => $inputs['product_id'],                        
-            ]);
-            
-            $Product = Product::find($inputs['product_id']);
-            $Company = Company::all();
+                'product_id' => $product_id ,                        
+            ]);           
         
-        
-        $Product->decrement('stock', $inputs['quantity']);
+        if($productStock >= $quantity)
+        {
             
+        $Product->decrement('stock', $quantity);
+
         $Sale->save();
         $Product->save();
-
-        return ($Sale);
-
+        }else{
+            abort(500);
         }
+        return array($Sale,$Product);
+
+    }
 
     //テーブル名
     protected $table = 'sales';

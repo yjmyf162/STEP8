@@ -17,17 +17,17 @@
       @endforeach
       <div class="form-group">
         <div>
-          <input type="text" id="keyword" placeholder="商品名のキーワードを入力" class="form-control" name="keyword">
-            <select id="choice" data-toggle="select" class="form-control" name="choice" >
+          <input type="text" id="keyword" placeholder="商品名のキーワードを入力" class="form_control" name="keyword">
+            <select id="choice" data-toggle="select" class="form_control" name="choice" >
                <option value="" disabled style='display:none;' @if (empty($Companies->company_name)) selected @endif>メーカーを選択してください</option>
                @foreach($Companies as $Company)
                 <option value="{{ $Company->id }}">{{ $Company->company_name }}</option>
                @endforeach
             </select>
-            <input type="text" id="price_upper" placeholder="価格の上限値を入力" class="form-control" name="price_upper">
-            <input type="text" id="price_lower" placeholder="価格の下限値を入力" class="form-control" name="price_lower">
-            <input type="text" id="stock_upper" placeholder="在庫数の上限値を入力" class="form-control" name="stock_upper">
-            <input type="text" id="stock_lower" placeholder="在庫数の下限値を入力" class="form-control" name="stock_lower">
+            <input type="text" id="price_upper" placeholder="価格の上限値を入力" class="form_control" name="price_upper">
+            <input type="text" id="price_lower" placeholder="価格の下限値を入力" class="form_control" name="price_lower">
+            <input type="text" id="stock_upper" placeholder="在庫数の上限値を入力" class="form_control" name="stock_upper">
+            <input type="text" id="stock_lower" placeholder="在庫数の下限値を入力" class="form_control" name="stock_lower">
           </div>
         <div>
           <input type="button" value="検索" class="btn btn-info"> 

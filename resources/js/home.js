@@ -3,7 +3,7 @@ $(function(){
 
   $.ajax({
     type: 'get', //HTTP通信の種類
-    url:'/step7/public/home/table', //通信したいURL
+    url:'/step8/public/home/table', //通信したいURL
     datatype:'json',
   })
   //通信が成功したとき
@@ -13,12 +13,12 @@ $(function(){
       
       <tr>                         
               <td>${value.id}</td>
-              <td><img src="http://localhost:8888/step7/public/${value.img_path}" width="10%"></td>
+              <td><img src="http://localhost:8888//public/${value.img_path}" width="10%"></td>
               <td>${value.product_name}</td>
               <td>${value.price}</td>
               <td>${value.stock}</td>
               <td>${value.company.company_name}</td>
-              <td><input type="submit" value="詳細" class = "btn-detail" onclick = "location.href = '/step7/public/home/${value.id}'"></td>
+              <td><input type="submit" value="詳細" class = "btn-detail" onclick = "location.href = '/step8/public/home/${value.id}'"></td>
               <td><form class="id">
               <input data-product_id="${value.id}" type="button" class="btn-delete" value="削除">                      
               </form>
@@ -46,7 +46,7 @@ $(function(){
               
    $.ajax({                   
       type: 'POST',
-      url: '/step7/public/home/delete/'+userID, 
+      url: '/step8/public/home/delete/'+userID, 
       dataType: 'json',
       data: {'id':userID
       }, 
@@ -92,7 +92,7 @@ $(function(){
       
       $.ajax({
         type: 'GET', //HTTP通信の種類
-        url:'/step7/public/home/search', //通信したいURL
+        url:'/step8/public/home/search', //通信したいURL
         data:{
           'keyword':keyword,
           'choice':choice,
@@ -119,12 +119,12 @@ $(function(){
                 html = `
                 <tr class="product-list">                    
                     <td>${id}</td>
-                    <td><img src="http://localhost:8888/step7/public/${img_path}" width="10%"></td>
+                    <td><img src="http://localhost:8888/step8/public/${img_path}" width="10%"></td>
                     <td>${product_name}</td>
                     <td>${price}</td>
                     <td>${stock}</td>
                     <td>${company_name}</td>
-                    <td><input type="submit" value="詳細" class = "btn-detail" onclick = "location.href = '/step7/public/home/${value.id}'"></td>
+                    <td><input type="submit" value="詳細" class = "btn-detail" onclick = "location.href = '/step8/public/home/${value.id}'"></td>
               <td><form class="id">
               <input data-product_id="${value.id}" type="button" class="btn-delete" value="削除">                      
               </form>
@@ -152,7 +152,7 @@ $(function(){
               
    $.ajax({                   
       type: 'POST',
-      url: '/step7/public/home/delete/'+userID, 
+      url: '/step8/public/home/delete/'+userID, 
       dataType: 'json',
       data: {'id':userID
       }, 
@@ -188,23 +188,35 @@ $(function dele(){});
 //ソート機能(id)
 $(function(){ 
 
-  let num = 0;
+  let clickCount = 0;
+  let timer = null
+  let timeout = 4000;
   let id ="";
+  
   $('.sort-id').on('click',function(){
 
-    $(this).data('click', ++num);
+    $(this).data('click', ++clickCount);
     let click = $(this).data('click');
-    if(click % 2 == 1){
-      id = 1;
-    }else{
-      id = 2;
-    }
+    
+       if(click % 2 == 1){
+          id = 1;
+        }else{
+          id = 2;
+        }
+        if(clickCount == 1){
+      timer = setTimeout(function(){       
+      timer = null;
+      clickCount = 0;
+      },timeout)
       
+    }  
+
+     
     $('.product-table').empty(); //もともとある要素を空にする     
      
       $.ajax({
         type: 'GET', //HTTP通信の種類
-        url:'/step7/public/home/sort/id', //通信したいURL
+        url:'/step8/public/home/sort/id', //通信したいURL
         data:{
           'id':id,
         },
@@ -226,12 +238,12 @@ $(function(){
                 html = `
                 <tr class="product-list">                    
                     <td>${id}</td>
-                    <td><img src="http://localhost:8888/step7/public/${img_path}" width="10%"></td>
+                    <td><img src="http://localhost:8888/step8/public/${img_path}" width="10%"></td>
                     <td>${product_name}</td>
                     <td>${price}</td>
                     <td>${stock}</td>
                     <td>${company_name}</td>
-                    <td><input type="submit" value="詳細" class = "btn-detail" onclick = "location.href = '/step7/public/home/${value.id}'"></td>
+                    <td><input type="submit" value="詳細" class = "btn-detail" onclick = "location.href = '/step8/public/home/${value.id}'"></td>
               <td><form class="id">
               <input data-product_id="${value.id}" type="button" class="btn-delete" value="削除">                      
               </form>
@@ -259,7 +271,7 @@ $(function(){
               
    $.ajax({                   
       type: 'POST',
-      url: '/step7/public/home/delete/'+userID, 
+      url: '/step8/public/home/delete/'+userID, 
       dataType: 'json',
       data: {'id':userID
       }, 
@@ -294,23 +306,33 @@ alert("エラー");
   //ソート機能(商品名)
 $(function(){ 
 
-  let num = 0;
+  let clickCount = 0;
+  let timer = null
+  let timeout = 4000;
   let product_name ="";
   $('.sort-product_name').on('click',function(){
 
-    $(this).data('click', ++num);
+    $(this).data('click', ++clickCount);
     let click = $(this).data('click');
     if(click % 2 == 1){
       product_name = 5;
     }else{
       product_name = 6;
     }
+
+    if(clickCount == 1){
+      timer = setTimeout(function(){       
+      timer = null;
+      clickCount = 0;
+      },timeout)
+      
+    }  
       
     $('.product-table').empty(); //もともとある要素を空にする
     
       $.ajax({
         type: 'GET', //HTTP通信の種類
-        url:'/step7/public/home/sort/product_name', //通信したいURL
+        url:'/step8/public/home/sort/product_name', //通信したいURL
         data:{
           'product_name':product_name,
         },
@@ -332,12 +354,12 @@ $(function(){
                 html = `
                 <tr class="product-list">                    
                     <td>${id}</td>
-                    <td><img src="http://localhost:8888/step7/public/${img_path}" width="10%"></td>
+                    <td><img src="http://localhost:8888/step8/public/${img_path}" width="10%"></td>
                     <td>${product_name}</td>
                     <td>${price}</td>
                     <td>${stock}</td>
                     <td>${company_name}</td>
-                    <td><input type="submit" value="詳細" class = "btn-detail" onclick = "location.href = '/step7/public/home/${value.id}'"></td>
+                    <td><input type="submit" value="詳細" class = "btn-detail" onclick = "location.href = '/step8/public/home/${value.id}'"></td>
               <td><form class="id">
               <input data-product_id="${value.id}" type="button" class="btn-delete" value="削除">                      
               </form>
@@ -365,7 +387,7 @@ $(function(){
               
    $.ajax({                   
       type: 'POST',
-      url: '/step7/public/home/delete/'+userID, 
+      url: '/step8/public/home/delete/'+userID, 
       dataType: 'json',
       data: {'id':userID
       }, 
@@ -400,23 +422,33 @@ alert("エラー");
   //ソート機能(価格)
   $(function(){ 
 
-    let num = 0;
+    let clickCount = 0;
+    let timer = null
+    let timeout = 4000;
     let price ="";
     $('.sort-price').on('click',function(){
 
-      $(this).data('click', ++num);
+      $(this).data('click', ++clickCount);
     let click = $(this).data('click');
     if(click % 2 == 1){
       price = 7;
     }else{
       price = 8;
     }
+
+    if(clickCount == 1){
+      timer = setTimeout(function(){       
+      timer = null;
+      clickCount = 0;
+      },timeout)
+      
+    }  
         
       $('.product-table').empty(); //もともとある要素を空にする
       
         $.ajax({
           type: 'GET', //HTTP通信の種類
-          url:'/step7/public/home/sort/price', //通信したいURL
+          url:'/step8/public/home/sort/price', //通信したいURL
           data:{
             'price':price,
           },
@@ -438,12 +470,12 @@ alert("エラー");
                   html = `
                   <tr class="product-list">                    
                       <td>${id}</td>
-                      <td><img src="http://localhost:8888/step7/public/${img_path}" width="10%"></td>
+                      <td><img src="http://localhost:8888/step8/public/${img_path}" width="10%"></td>
                       <td>${product_name}</td>
                       <td>${price}</td>
                       <td>${stock}</td>
                       <td>${company_name}</td>
-                      <td><input type="submit" value="詳細" class = "btn-detail" onclick = "location.href = '/step7/public/home/${value.id}'"></td>
+                      <td><input type="submit" value="詳細" class = "btn-detail" onclick = "location.href = '/step8/public/home/${value.id}'"></td>
                 <td><form class="id">
                 <input data-product_id="${value.id}" type="button" class="btn-delete" value="削除">                      
                 </form>
@@ -471,7 +503,7 @@ alert("エラー");
                 
      $.ajax({                   
         type: 'POST',
-        url: '/step7/public/home/delete/'+userID, 
+        url: '/step8/public/home/delete/'+userID, 
         dataType: 'json',
         data: {'id':userID
         }, 
@@ -506,23 +538,33 @@ alert("エラー");
 //ソート機能(在庫)
 $(function(){ 
 
-  let num = 0;
+  let clickCount = 0;
+  let timer = null
+  let timeout = 4000;
   let stock ="";
   $('.sort-stock').on('click',function(){
 
-    $(this).data('click', ++num);
+    $(this).data('click', ++clickCount);
     let click = $(this).data('click');
     if(click % 2 == 1){
       stock = 9;
     }else{
       stock = 10;
     }
+
+    if(clickCount == 1){
+      timer = setTimeout(function(){       
+      timer = null;
+      clickCount = 0;
+      },timeout)
+      
+    }  
       
     $('.product-table').empty(); //もともとある要素を空にする
     
       $.ajax({
         type: 'GET', //HTTP通信の種類
-        url:'/step7/public/home/sort/stock', //通信したいURL
+        url:'/step8/public/home/sort/stock', //通信したいURL
         data:{
           'stock':stock,
         },
@@ -544,12 +586,12 @@ $(function(){
                 html = `
                 <tr class="product-list">                    
                     <td>${id}</td>
-                    <td><img src="http://localhost:8888/step7/public/${img_path}" width="10%"></td>
+                    <td><img src="http://localhost:8888/step8/public/${img_path}" width="10%"></td>
                     <td>${product_name}</td>
                     <td>${price}</td>
                     <td>${stock}</td>
                     <td>${company_name}</td>
-                    <td><input type="submit" value="詳細" class = "btn-detail" onclick = "location.href = '/step7/public/home/${value.id}'"></td>
+                    <td><input type="submit" value="詳細" class = "btn-detail" onclick = "location.href = '/step8/public/home/${value.id}'"></td>
               <td><form class="id">
               <input data-product_id="${value.id}" type="button" class="btn-delete" value="削除">                      
               </form>
@@ -577,7 +619,7 @@ $(function(){
             
  $.ajax({                   
     type: 'POST',
-    url: '/step7/public/home/delete/'+userID, 
+    url: '/step8/public/home/delete/'+userID, 
     dataType: 'json',
     data: {'id':userID
     }, 
@@ -612,23 +654,33 @@ alert("エラー");
 //ソート機能(メーカー名)
 $(function(){ 
 
-  let num = 0;
+  let clickCount = 0;
+  let timer = null
+  let timeout = 4000;
   let company_name ="";
   $('.sort-company_name').on('click',function(){
 
-    $(this).data('click', ++num);
+    $(this).data('click', ++clickCount);
     let click = $(this).data('click');
     if(click % 2 == 1){
       company_name = 11;
     }else{
       company_name = 12;
     }
+    
+    if(clickCount == 1){
+      timer = setTimeout(function(){       
+      timer = null;
+      clickCount = 0;
+      },timeout)
       
+    }  
+
     $('.product-table').empty(); //もともとある要素を空にする
     
       $.ajax({
         type: 'GET', //HTTP通信の種類
-        url:'/step7/public/home/sort/company_name', //通信したいURL
+        url:'/step8/public/home/sort/company_name', //通信したいURL
         data:{
           'company_name':company_name
         },
@@ -650,12 +702,12 @@ $(function(){
                 html = `
                 <tr class="product-list">                    
                     <td>${id}</td>
-                    <td><img src="http://localhost:8888/step7/public/${img_path}" width="10%"></td>
+                    <td><img src="http://localhost:8888/step8/public/${img_path}" width="10%"></td>
                     <td>${product_name}</td>
                     <td>${price}</td>
                     <td>${stock}</td>
                     <td>${company_name}</td>
-                    <td><input type="submit" value="詳細" class = "btn-detail" onclick = "location.href = '/step7/public/home/${value.id}'"></td>
+                    <td><input type="submit" value="詳細" class = "btn-detail" onclick = "location.href = '/step8/public/home/${value.id}'"></td>
               <td><form class="id">
               <input data-product_id="${value.id}" type="button" class="btn-delete" value="削除">                      
               </form>
@@ -683,7 +735,7 @@ $(function(){
             
  $.ajax({                   
     type: 'POST',
-    url: '/step7/public/home/delete/'+userID, 
+    url: '/step8/public/home/delete/'+userID, 
     dataType: 'json',
     data: {'id':userID
     }, 

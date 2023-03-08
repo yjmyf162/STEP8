@@ -44,17 +44,81 @@ class Product extends Model
                         ->where('company_id', 'LIKE', $choice)->where('price', '<=', $price_upper)
                         ->where('price', '>=', $price_lower)->where('stock', '<=', $stock_upper)
                         ->where('stock', '>=', $stock_lower)->get();}
+
+                        elseif((!empty($stock_upper && $stock_lower))&&(!empty($price_upper))){
+                        $products = Product::with('Company')->where('product_name', 'LIKE', "%{$keyword}%")
+                        ->where('company_id', 'LIKE', $choice)->where('price', '<=', $price_upper)
+                        ->where('stock', '<=', $stock_upper)
+                        ->where('stock', '>=', $stock_lower)->get();}
+
+                        elseif((!empty($stock_upper && $stock_lower))&&(!empty($price_lower))){
+                            $products = Product::with('Company')->where('product_name', 'LIKE', "%{$keyword}%")
+                            ->where('company_id', 'LIKE', $choice)
+                            ->where('price', '>=', $price_lower)->where('stock', '<=', $stock_upper)
+                            ->where('stock', '>=', $stock_lower)->get();}
                     
+                            elseif((!empty($stock_upper))&&(!empty($price_upper && $price_lower))){
+                                $products = Product::with('Company')->where('product_name', 'LIKE', "%{$keyword}%")
+                                ->where('company_id', 'LIKE', $choice)->where('price', '<=', $price_upper)
+                                ->where('price', '>=', $price_lower)->where('stock', '<=', $stock_upper)
+                                ->get();}
+
+                                elseif((!empty($stock_lower))&&(!empty($price_upper && $price_lower))){
+                                    $products = Product::with('Company')->where('product_name', 'LIKE', "%{$keyword}%")
+                                    ->where('company_id', 'LIKE', $choice)->where('price', '<=', $price_upper)
+                                    ->where('price', '>=', $price_lower)
+                                    ->where('stock', '>=', $stock_lower)->get();}
                     
                         elseif(!empty($stock_upper && $stock_lower)){
                             $products = Product::with('Company')->where('product_name', 'LIKE', "%{$keyword}%")
                             ->where('company_id', 'LIKE', $choice)->where('stock', '<=', $stock_upper)
                             ->where('stock', '>=', $stock_lower)->get();}
 
+                            elseif(!empty($stock_upper && $price_upper)){
+                                $products = Product::with('Company')->where('product_name', 'LIKE', "%{$keyword}%")
+                                ->where('company_id', 'LIKE', $choice)->where('stock', '<=', $stock_upper)
+                                ->where('price', '<=', $price_upper)->get();}
+
+                                elseif(!empty($stock_upper && $price_lower)){
+                                    $products = Product::with('Company')->where('product_name', 'LIKE', "%{$keyword}%")
+                                    ->where('company_id', 'LIKE', $choice)->where('stock', '<=', $stock_upper)
+                                    ->where('price', '>=', $price_lower)->get();}
+    
+
                             elseif(!empty($price_upper && $price_lower)){
                                 $products = Product::with('Company')->where('product_name', 'LIKE', "%{$keyword}%")
-                                        ->where('company_id', 'LIKE', $choice)->where('price', '<=', $price_upper)
-                                        ->where('price', '>=', $price_lower)->get();}
+                                ->where('company_id', 'LIKE', $choice)->where('price', '<=', $price_upper)
+                                ->where('price', '>=', $price_lower)->get();}
+
+                            elseif(!empty($price_upper && $stock_lower)){
+                                $products = Product::with('Company')->where('product_name', 'LIKE', "%{$keyword}%")
+                                ->where('company_id', 'LIKE', $choice)->where('price', '<=', $price_upper)
+                                ->where('stock', '>=', $stock_lower)->get();}
+
+                                elseif(!empty($stock_lower && $price_lower)){
+                                    $products = Product::with('Company')->where('product_name', 'LIKE', "%{$keyword}%")
+                                    ->where('company_id', 'LIKE', $choice)->where('stock', '>=', $stock_lower)
+                                    ->where('price', '>=', $price_lower)->get();}
+
+                                    elseif(!empty($stock_upper)){
+                                        $products = Product::with('Company')->where('product_name', 'LIKE', "%{$keyword}%")
+                                        ->where('company_id', 'LIKE', $choice)->where('stock', '<=', $stock_upper)
+                                        ->get();}
+                                    
+                                        elseif(!empty($stock_lower)){
+                                            $products = Product::with('Company')->where('product_name', 'LIKE', "%{$keyword}%")
+                                            ->where('company_id', 'LIKE', $choice)
+                                            ->where('stock', '>=', $stock_lower)->get();}
+
+                                            elseif(!empty($price_upper)){
+                                                $products = Product::with('Company')->where('product_name', 'LIKE', "%{$keyword}%")
+                                                ->where('company_id', 'LIKE', $choice)->where('price', '<=', $price_upper)
+                                                ->get();}
+
+                                                elseif(!empty($price_lower)){
+                                                    $products = Product::with('Company')->where('product_name', 'LIKE', "%{$keyword}%")
+                                                    ->where('company_id', 'LIKE', $choice)
+                                                    ->where('price', '>=', $price_lower)->get();}
                         
                             return ($products);    
     }       
